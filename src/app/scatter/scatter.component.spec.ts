@@ -8,10 +8,12 @@ describe('ScatterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ScatterComponent]
+      declarations: [ ScatterComponent ]
     })
     .compileComponents();
-    
+  });
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(ScatterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
