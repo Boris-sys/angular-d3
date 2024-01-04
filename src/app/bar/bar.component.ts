@@ -8,13 +8,6 @@ import * as d3 from 'd3';
   styleUrls: ['./bar.component.scss']
 })
 export class BarComponent implements OnInit {
-  private data = [
-    {"Framework": "Vue", "Stars": "166443", "Released": "2014"},
-    {"Framework": "React", "Stars": "150793", "Released": "2013"},
-    {"Framework": "Angular", "Stars": "62342", "Released": "2016"},
-    {"Framework": "Backbone", "Stars": "27647", "Released": "2010"},
-    {"Framework": "Ember", "Stars": "21471", "Released": "2011"},
-  ];
   private svg:any;
   private margin = 50;
   private width = 750 - (this.margin * 2);
@@ -22,7 +15,7 @@ export class BarComponent implements OnInit {
 
   ngOnInit(): void {
     const svg = this.createSvg();
-    this.drawBars(this.data);
+    d3.csv("/assets/frameworks.csv").then(data => this.drawBars(data));
 }
 
 private createSvg(): void {

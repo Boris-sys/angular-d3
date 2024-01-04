@@ -9,14 +9,6 @@ import * as d3 from 'd3';
   styleUrls: ['./pie.component.scss']
 })
 export class PieComponent implements OnInit {
-  private data = [
-    {"Framework": "Vue", "Stars": "166443", "Released": "2014"},
-    {"Framework": "React", "Stars": "150793", "Released": "2013"},
-    {"Framework": "Angular", "Stars": "62342", "Released": "2016"},
-    {"Framework": "Backbone", "Stars": "27647", "Released": "2010"},
-    {"Framework": "Ember", "Stars": "21471", "Released": "2011"},
-  ];
-  
   private svg: any;
   private margin = 50;
   private width = 750;
@@ -27,8 +19,9 @@ export class PieComponent implements OnInit {
 
   ngOnInit(): void {
     this.createSvg();
-    this.createColors();
-    this.drawChart();
+    
+    d3.csv("/assets/frameworks.csv").then(data => this.createColors(data));
+    d3.csv("/assets/frameworks.csv").then(data => this.drawChart(data));
   }
 
   private createSvg(): void {
@@ -42,19 +35,19 @@ export class PieComponent implements OnInit {
       "translate(" + this.width / 2 + "," + this.height / 2 + ")"
     );
 }
-private createColors(): void {
+private createColors(data: any[]): void {
   this.colors = d3.scaleOrdinal()
-  .domain(this.data.map(d => d.Stars.toString()))
+  .domain(data.map(d => d.Stars.toString()))
   .range(["#c7d3ec", "#a5b8db", "#879cc4", "#677795", "#5a6782"]);
 }
-private drawChart(): void {
+private drawChart(data: any[]): void {
   // Compute the position of each group on the pie:
   const pie = d3.pie<any>().value((d: any) => Number(d.Stars));
 
   // Build the pie chart
   this.svg
   .selectAll('pieces')
-  .data(pie(this.data))
+  .data(pie(data))
   .enter()
   .append('path')
   .attr('d', d3.arc()
@@ -72,7 +65,7 @@ private drawChart(): void {
 
   this.svg
   .selectAll('pieces')
-  .data(pie(this.data))
+  .data(pie(data))
   .enter()
   .append('text')
   .text((d: any)=> d.data.Framework)

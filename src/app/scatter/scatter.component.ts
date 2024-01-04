@@ -9,13 +9,6 @@ import * as d3 from 'd3';
   styleUrls: ['./scatter.component.scss']
 })
 export class ScatterComponent implements OnInit {
-  private data = [
-    {"Framework": "Vue", "Stars": "166443", "Released": "2014"},
-    {"Framework": "React", "Stars": "150793", "Released": "2013"},
-    {"Framework": "Angular", "Stars": "62342", "Released": "2016"},
-    {"Framework": "Backbone", "Stars": "27647", "Released": "2010"},
-    {"Framework": "Ember", "Stars": "21471", "Released": "2011"},
-  ];
   private svg: any;
   private margin = 50;
   private width = 750 - (this.margin * 2);
@@ -25,7 +18,7 @@ export class ScatterComponent implements OnInit {
 
   ngOnInit(): void {
     this.createSvg();
-    this.drawPlot();
+    d3.csv("/assets/frameworks.csv").then(data => this.drawPlot(data));
 }
 
   private createSvg(): void {
@@ -37,7 +30,7 @@ export class ScatterComponent implements OnInit {
     .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
   }
 
-  private drawPlot(): void {
+  private drawPlot(data: any[]): void {
     // Add X axis
     const x = d3.scaleLinear()
     .domain([2009, 2017])
@@ -56,7 +49,7 @@ export class ScatterComponent implements OnInit {
     // Add dots
     const dots = this.svg.append('g');
     dots.selectAll("dot")
-    .data(this.data)
+    .data(data)
     .enter()
     .append("circle")
     .attr("cx", (d: any) => x(d.Released))
@@ -67,7 +60,7 @@ export class ScatterComponent implements OnInit {
 
     // Add labels
     dots.selectAll("text")
-    .data(this.data)
+    .data(data)
     .enter()
     .append("text")
     .text( (d: any) => d.Framework)
