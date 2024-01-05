@@ -17,12 +17,28 @@ export class PieComponent implements OnInit {
   private radius = Math.min(this.width, this.height) / 2 - this.margin;
   private colors: any;  constructor() { }
 
+  // ngOnInit(): void {
+  //   this.createSvg();
+    
+  //   d3.csv("/assets/frameworks.csv").then(data => this.createColors(data));
+  //   d3.csv("/assets/frameworks.csv").then(data => this.drawChart(data));
+  // }
+
+
   ngOnInit(): void {
     this.createSvg();
-    
-    d3.csv("/assets/frameworks.csv").then(data => this.createColors(data));
-    d3.csv("/assets/frameworks.csv").then(data => this.drawChart(data));
-  }
+    // Fetch JSON from an external endpoint
+    type ChartDataType ={
+      Framework: string,
+      Stars: number,
+      Released: number
+    }
+     d3.json('https://json.extendsclass.com/bin/6d2e8e7128ed').then(data=> {
+      const chartData = data as ChartDataType[];
+      this.createColors(chartData);
+      this.drawChart(chartData);
+  });
+}
 
   private createSvg(): void {
     this.svg = d3.select("figure#pie")
@@ -75,3 +91,4 @@ private drawChart(data: any[]): void {
 }
 
 }
+

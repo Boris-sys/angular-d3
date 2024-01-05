@@ -13,9 +13,23 @@ export class BarComponent implements OnInit {
   private width = 750 - (this.margin * 2);
   private height = 400 - (this.margin * 2);
 
-  ngOnInit(): void {
-    const svg = this.createSvg();
-    d3.csv("/assets/frameworks.csv").then(data => this.drawBars(data));
+//   ngOnInit(): void {
+//     const svg = this.createSvg();
+//     d3.csv("/assets/frameworks.csv").then(data => this.drawBars(data));
+// }
+
+ngOnInit(): void {
+  this.createSvg();
+  // Fetch JSON from an external endpoint
+  type ChartDataType ={
+    Framework: string,
+    Stars: number,
+    Released: number
+  }
+   d3.json('https://json.extendsclass.com/bin/6d2e8e7128ed').then(data=> {
+    const chartData = data as ChartDataType[];
+    this.drawBars(chartData);
+});
 }
 
 private createSvg(): void {

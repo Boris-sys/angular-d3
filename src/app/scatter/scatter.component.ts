@@ -16,9 +16,23 @@ export class ScatterComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-    this.createSvg();
-    d3.csv("/assets/frameworks.csv").then(data => this.drawPlot(data));
+//   ngOnInit(): void {
+//     this.createSvg();
+//     d3.csv("/assets/frameworks.csv").then(data => this.drawPlot(data));
+// }
+
+ngOnInit(): void {
+  this.createSvg();
+  // Fetch JSON from an external endpoint
+  type ChartDataType ={
+    Framework: string,
+    Stars: number,
+    Released: number
+  }
+   d3.json('https://json.extendsclass.com/bin/6d2e8e7128ed').then(data=> {
+    const chartData = data as ChartDataType[];
+    this.drawPlot(chartData);
+});
 }
 
   private createSvg(): void {
